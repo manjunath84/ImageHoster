@@ -1,4 +1,3 @@
-/*
 package ImageHoster.controller;
 
 import ImageHoster.model.Image;
@@ -85,8 +84,14 @@ public class ImageControllerTest {
         image.setTitle("new");
         image.setDescription("This image is for testing purpose");
         image.setUser(user);
+        Tag tag1 = new Tag("tag1");
+        Tag tag2 = new Tag("tag2");
+        List<Tag> tagList = new ArrayList<>();
+        tagList.add(tag1);
+        tagList.add(tag2);
+        image.setTags(tagList);
 
-        Mockito.when(imageService.getImage(Mockito.anyInt())).thenReturn(image);
+        Mockito.when(imageService.getImage(Mockito.anyInt(), Mockito.anyString())).thenReturn(image);
 
         this.mockMvc.perform(get("/images/1/new").session(session))
                 .andExpect(view().name("images/image"))
@@ -210,21 +215,26 @@ public class ImageControllerTest {
 
         User user1 = new User();
         UserProfile userProfile1 = new UserProfile();
-        userProfile.setId(2);
-        userProfile.setEmailAddress("p@gmail.com");
-        userProfile.setFullName("Prerna");
-        userProfile.setMobileNumber("9876543210");
-        user.setProfile(userProfile1);
-        user.setId(2);
-        user.setUsername("Prerna");
-        user.setPassword("password1@@");
+        userProfile1.setId(2);
+        userProfile1.setEmailAddress("p@gmail.com");
+        userProfile1.setFullName("Prerna");
+        userProfile1.setMobileNumber("9876543210");
+        user1.setProfile(userProfile1);
+        user1.setId(2);
+        user1.setUsername("Prerna");
+        user1.setPassword("password1@@");
 
         Image image = new Image();
         image.setId(1);
         image.setTitle("new");
         image.setDescription("This image is for testing purpose");
         image.setUser(user1);
-
+        Tag tag1 = new Tag("tag3");
+        Tag tag2 = new Tag("tag5");
+        List<Tag> tagList = new ArrayList<>();
+        tagList.add(tag1);
+        tagList.add(tag2);
+        image.setTags(tagList);
 
         Mockito.when(imageService.getImage(Mockito.anyInt())).thenReturn(image);
 
@@ -285,21 +295,26 @@ public class ImageControllerTest {
 
         User user1 = new User();
         UserProfile userProfile1 = new UserProfile();
-        userProfile.setId(2);
-        userProfile.setEmailAddress("p@gmail.com");
-        userProfile.setFullName("Prerna");
-        userProfile.setMobileNumber("9876543210");
-        user.setProfile(userProfile1);
-        user.setId(2);
-        user.setUsername("Prerna");
-        user.setPassword("password1@@");
+        userProfile1.setId(2);
+        userProfile1.setEmailAddress("p@gmail.com");
+        userProfile1.setFullName("Prerna");
+        userProfile1.setMobileNumber("9876543210");
+        user1.setProfile(userProfile1);
+        user1.setId(2);
+        user1.setUsername("Prerna");
+        user1.setPassword("password1@@");
 
         Image image = new Image();
         image.setId(1);
         image.setTitle("new");
         image.setDescription("This image is for testing purpose");
         image.setUser(user1);
-
+        Tag tag1 = new Tag("tag1");
+        Tag tag2 = new Tag("tag3");
+        List<Tag> tagList = new ArrayList<>();
+        tagList.add(tag1);
+        tagList.add(tag2);
+        image.setTags(tagList);
 
         Mockito.when(imageService.getImage(Mockito.anyInt())).thenReturn(image);
 
@@ -310,4 +325,3 @@ public class ImageControllerTest {
     }
 }
 
-*/
