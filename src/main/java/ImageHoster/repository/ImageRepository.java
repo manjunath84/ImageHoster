@@ -54,7 +54,7 @@ public class ImageRepository {
         EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<Image> typedQuery = em.createQuery("SELECT i from Image i where i.id =:imageId and i.title =:title", Image.class);
-            typedQuery.setParameter("imageId",imageId);
+            typedQuery.setParameter("imageId", imageId);
             typedQuery.setParameter("title", title);
             return typedQuery.getSingleResult();
         } catch (NoResultException nre) {

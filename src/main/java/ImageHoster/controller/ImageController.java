@@ -36,9 +36,9 @@ public class ImageController {
     }
 
     //This method is called when the details of the specific image with corresponding title are to be displayed
-    //The logic is to get the image from the databse with corresponding title. After getting the image from the database the details are shown
-    //First receive the dynamic parameter in the incoming request URL in a string variable 'title' and also the Model type object
-    //Call the getImageByTitle() method in the business logic to fetch all the details of that image
+    //The logic is to get the image from the database with corresponding image id and title. After getting the image from the database the details are shown
+    //First receive the dynamic parameters in the incoming request URL for image id in a Integer using variable 'imageId', title in a string variable 'title' and also the Model type object
+    //Call the getImage() method in the business logic to fetch all the details of that image
     //Add the image in the Model type object with 'image' as the key
     //Return 'images/image.html' file
 
@@ -87,9 +87,10 @@ public class ImageController {
 
     //This controller method is called when the request pattern is of type 'editImage'
     //This method fetches the image with the corresponding id from the database and adds it to the model with the key as 'image'
-    //The method then returns 'images/edit.html' file wherein you fill all the updated details of the image
+    //This method then fetches 'loggeduser' data from httpsession and adds tags to the model with the key as 'tags' and error message to the model with the key as 'tags' and then returns images/image.html
+    //The method then returns 'images/edit.html' file wherein you fill all the updated details of the image if the owner of the image is editing
 
-    //The method first needs to convert the list of all the tags to a string containing all the tags separated by a comma and then add this string in a Model type object
+    //The method first needs to convert the list of all the tags to a string containing all the tags separated by a comma and then add this string in a Model type object if the owner of the image is editing.
     //This string is then displayed by 'edit.html' file as previous tags of an image
     @RequestMapping(value = "/editImage")
     public String editImage(@RequestParam("imageId") Integer imageId, Model model, HttpSession httpSession) {
@@ -98,13 +99,13 @@ public class ImageController {
 
         User loggeduser = (User) httpSession.getAttribute("loggeduser");
 
-        if(image.getUser().getUsername().equals(loggeduser.getUsername())){
+        if (image.getUser().getUsername().equals(loggeduser.getUsername())) {
             String tags = convertTagsToString(image.getTags());
             model.addAttribute("tags", tags);
             return "images/edit";
-        } else{
+        } else {
             model.addAttribute("tags", image.getTags());
-            model.addAttribute("editError","Only the owner of the image can edit the image");
+            model.addAttribute("editError", "Only the owner of the image can edit the image");
             return "images/image";
         }
     }
@@ -140,7 +141,7 @@ public class ImageController {
         updatedImage.setDate(new Date());
 
         imageService.updateImage(updatedImage);
-        return "redirect:/images/" +updatedImage.getId() + "/" + updatedImage.getTitle();
+        return "redirect:/images/" + updatedImage.getId() + "/" + updatedImage.getTitle();
     }
 
 
@@ -152,13 +153,13 @@ public class ImageController {
         Image image = imageService.getImage(imageId);
         User loggeduser = (User) httpSession.getAttribute("loggeduser");
 
-        if(image.getUser().getUsername().equals(loggeduser.getUsername())){
+        if (image.getUser().getUsername().equals(loggeduser.getUsername())) {
             imageService.deleteImage(imageId);
             return "redirect:/images";
-        } else{
+        } else {
             model.addAttribute("image", image);
             model.addAttribute("tags", image.getTags());
-            model.addAttribute("deleteError","Only the owner of the image can delete the image");
+            model.addAttribute("deleteError", "Only the owner of the image can delete the image");
             return "images/image";
         }
     }
