@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.regex.Pattern;
 
 
 @Controller
@@ -38,11 +39,25 @@ public class UserController {
     }
 
     //This controller method is called when the request pattern is of type 'users/registration' and also the incoming request is of POST type
-    //This method calls the business logic and after the user record is persisted in the database, directs to login page
+    //This method calls the business logic if it passes password strength check (it must contain at least 1 alphabet, 1 number & 1 special character)
+    // and after the user record is persisted in the database, directs to login page
+    //This method sets error message as 'passwordTypeError' to model object if it does not pass password strength check and returns 'users/login.html'
     @RequestMapping(value = "users/registration", method = RequestMethod.POST)
-    public String registerUser(User user) {
-        userService.registerUser(user);
-        return "redirect:/users/login";
+    public String registerUser(User user, Model model) {
+        Pattern containsAlphabet = Pattern.compile(".*[a-zA-Z]+.*");
+        Pattern containsNumber = Pattern.compile(".*[0-9]+.*");
+        Pattern containsSpecialChar = Pattern.compile(".*[^a-zA-Z0-9]+.*");
+        if (containsAlphabet.matcher(user.getPassword()).matches()
+                && containsNumber.matcher(user.getPassword()).matches()
+                && containsSpecialChar.matcher(user.getPassword()).matches()) {
+            userService.registerUser(user);
+            return "users/login";
+        } else {
+            final String error = "Password must contain atleast 1 alphabet, 1 number & 1 special character";
+            model.addAttribute("passwordTypeError", error);
+            model.addAttribute("User", user);
+            return "users/registration";
+        }
     }
 
     //This controller method is called when the request pattern is of type 'users/login'
