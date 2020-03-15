@@ -50,6 +50,7 @@ public class ImageController {
         Image image = imageService.getImage(imageId, title);
         model.addAttribute("image", image);
         model.addAttribute("tags", image.getTags());
+        model.addAttribute("comments", image.getComments());
         return "images/image";
     }
 
@@ -106,6 +107,7 @@ public class ImageController {
         } else {
             model.addAttribute("tags", image.getTags());
             model.addAttribute("editError", "Only the owner of the image can edit the image");
+            model.addAttribute("comments", image.getComments());
             return "images/image";
         }
     }
@@ -144,7 +146,6 @@ public class ImageController {
         return "redirect:/images/" + updatedImage.getId() + "/" + updatedImage.getTitle();
     }
 
-
     //This controller method is called when the request pattern is of type 'deleteImage' and also the incoming request is of DELETE type
     //The method calls the deleteImage() method in the business logic passing the id of the image to be deleted
     //Looks for a controller method with request mapping of type '/images'
@@ -160,6 +161,7 @@ public class ImageController {
             model.addAttribute("image", image);
             model.addAttribute("tags", image.getTags());
             model.addAttribute("deleteError", "Only the owner of the image can delete the image");
+            model.addAttribute("comments", image.getComments());
             return "images/image";
         }
     }
